@@ -1,29 +1,32 @@
+# frozen_string_literal: true
 
+# linked-list containing Node objects
 class LinkedList
-  attr_accessor :head, :tail, :name
   def initialize(head = nil, tail = nil)
     @head = head
     @tail = tail
+    @node = nil
   end
 
   def append(value)
     # adds a new node containing value to the end of the list
     if @head.nil?
       prepend(value)
+      @tail = @head
     else
-      puts "hello"
-      tmp = Node.new(nil, @head)
-      until tmp.next_node.nil?
-        tmp = tmp.next_node
-      end
-      tmp.next_node = Node.new(value, nil)  
+      current = Node.new(nil, @head)
+      current = current.next_node until current.next_node.nil?
+      current.next_node = Node.new(value, nil)
+      @tail = current.next_node
     end
   end
 
   def prepend(value)
     # adds a new node containing value to the start of the list
-    node = Node.new(value, @head)
-    @head = node
+    current = Node.new(value, @head)
+    @head = current
+    @tail = @head if @head.next_node.nil?
+    @head
   end
 
   def size
@@ -31,11 +34,13 @@ class LinkedList
   end
 
   def head
-    # returns the first node in the list
+    # head returns the first node in the list
+    @head.nil? ? nil : @head.value
   end
 
   def tail
     # returns the last node in the list
+    @tail.nil? ? nil : @tail.value
   end
 
   def at(index)
@@ -47,7 +52,7 @@ class LinkedList
   end
 
   def contains?(value)
-    # returns true if the passed in value is in the list and otherwise returns false.
+    # returns true if the passed in value is in the list, else returns false.
   end
 
   def find(value)
@@ -57,9 +62,20 @@ class LinkedList
   def to_s
     # represent LinkedList objects as strings, in order to print them to console
     # format should be: ( value ) -> ( value ) -> ( value ) -> nil
+    result = ''
+    current = Node.new(@head.value, @head)
+    until current.nil?
+      unless current.next_node.nil?
+        result += " ( #{current.next_node.value} ) -> "
+      end
+      result += 'nil ' if current.next_node.nil?
+      current = current.next_node
+    end
+    result
   end
 end
 
+# creates Node objects
 class Node
   attr_accessor :value, :next_node
 
