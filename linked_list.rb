@@ -5,11 +5,10 @@ class LinkedList
   def initialize(head = nil, tail = nil)
     @head = head
     @tail = tail
-    @node = nil
   end
 
+  # adds a new node containing value to the end of the list
   def append(value)
-    # adds a new node containing value to the end of the list
     if @head.nil?
       prepend(value)
       @tail = @head
@@ -21,18 +20,19 @@ class LinkedList
     end
   end
 
+  # adds a new node containing value to the start of the list
   def prepend(value)
-    # adds a new node containing value to the start of the list
     current = Node.new(value, @head)
     @head = current
+    # head and tail are the same if there's only one item in the list
     @tail = @head if @head.next_node.nil?
     @head
   end
 
+  # returns the total number of nodes in the list
   def size
-    # returns the total number of nodes in the list
     size = 0
-    current = Node.new(@head.value, @head)
+    current = Node.new(current, @head)
     until current.next_node.nil?
       current = current.next_node
       size += 1
@@ -40,36 +40,65 @@ class LinkedList
     size
   end
 
+  # head returns the first node in the list
   def head
-    # head returns the first node in the list
     @head.nil? ? nil : @head.value
   end
 
+  # returns the last node in the list
   def tail
-    # returns the last node in the list
     @tail.nil? ? nil : @tail.value
   end
-
+  
+  # returns the node at the given index
   def at(index)
-    # returns the node at the given index
+    i = 0
+    current = Node.new(current, @head)
+    until i > index
+      current.nil? ? nil : current = current.next_node
+      i += 1
+    end
+    current.nil? ? nil : current.value
   end
-
+  
+  # removes the last element from the list
   def pop
-    # removes the last element from the list
+    return nil if @head.nil?
+    current = Node.new(current = @head.value, @head)
+    if @head.next_node.nil?
+      result = current.value
+      @head = nil
+      @tail = nil
+    else
+      # stop iteration directly before item to be removed (current.next_node)
+      until current.next_node.next_node.nil?
+        current = current.next_node
+        # set tail to node before node that will be removed
+        @tail = current
+      end
+      # set result to the value of node that will be removed
+      result = current.next_node.value
+      # remove the node
+      current.next_node = nil
+    end
+    result
   end
 
+# returns true if the passed in value is in the list, else returns false.
   def contains?(value)
-    # returns true if the passed in value is in the list, else returns false.
+
   end
 
+# returns the index of the node containing value, or nil if not found
   def find(value)
-    # returns the index of the node containing value, or nil if not found
+
   end
 
+# represent LinkedList objects as strings, in order to print them to console
+# format should be: ( value ) -> ( value ) -> ( value ) -> nil
   def to_s
-    # represent LinkedList objects as strings, in order to print them to console
-    # format should be: ( value ) -> ( value ) -> ( value ) -> nil
     result = ''
+    return result if @head.nil?
     current = Node.new(@head.value, @head)
     until current.nil?
       unless current.next_node.nil?
