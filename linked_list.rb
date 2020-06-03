@@ -31,6 +31,13 @@ class LinkedList
 
   def size
     # returns the total number of nodes in the list
+    size = 0
+    current = Node.new(@head.value, @head)
+    until current.next_node.nil?
+      current = current.next_node
+      size += 1
+    end
+    size
   end
 
   def head
