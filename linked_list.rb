@@ -2,32 +2,34 @@
 
 # linked-list containing Node objects
 class LinkedList
+  attr_reader :head, :tail
+
   def initialize(head = nil, tail = nil)
     @head = head
     @tail = tail
   end
 
-  # head returns the first node in the list
-  def head
-    @head.nil? ? nil : @head.value
-  end
-
-  # returns the last node in the list
-  def tail
-    @tail.nil? ? nil : @tail.value
-  end
-
   # adds a new node containing value to the end of the list
+  # def append(value)
+  #   if @head.nil?
+  #     prepend(value)
+  #     @tail = @head
+  #   else
+  #     current = @head
+  #     current = current.next_node until current.next_node.nil?
+  #     current.next_node = Node.new(value)
+  #     @tail = current.next_node
+  #   end
+  #   @tail.value
+  # end
+
   def append(value)
     if @head.nil?
       prepend(value)
-      @tail = @head
     else
-      current = Node.new(nil, @head)
-      current = current.next_node until current.next_node.nil?
-      current.next_node = Node.new(value, nil)
-      @tail = current.next_node
-      @tail.value
+      current = Node.new(value)
+      @tail.next_node = current
+      @tail = current
     end
   end
 
@@ -35,15 +37,17 @@ class LinkedList
   def prepend(value)
     current = Node.new(value, @head)
     @head = current
-    # head and tail are the same if there's only one item in the list
     @tail = @head if @head.next_node.nil?
-    @head.value
+    @head
   end
 
   # returns the total number of nodes in the list
-  def size(size = 0)
-    current = Node.new(current, @head)
-    until current.next_node.nil?
+  def size
+    return 0 if @head.nil?
+
+    size = 0
+    current = @head
+    until current.nil?
       current = current.next_node
       size += 1
     end
@@ -52,10 +56,12 @@ class LinkedList
 
   # returns the node at the given index
   def at(index)
-    i = 0
-    current = Node.new(current, @head)
+    return 'index must be an integer' if index.is_a?(String)
+
+    i = 1
+    current = @head
     until i > index
-      current.nil? ? nil : current = current.next_node
+      current = current.next_node unless current.nil?
       i += 1
     end
     current.nil? ? nil : current.value
@@ -63,14 +69,12 @@ class LinkedList
 
   # removes the last element from the list
   def pop
-    return nil if @head.nil?
-
-    current = Node.new(@head.value, @head)
+    current = @head
     if @head.next_node.nil?
+      @head = nil
+      @tail = nil
       result = current.value
-      reset_head_and_tail
     else
-      # stop iteration before item to be removed, i.e. current.next_node
       current = current.next_node until current.next_node.next_node.nil?
       @tail = current
       result = current.next_node.value
@@ -79,34 +83,47 @@ class LinkedList
     result
   end
 
-  def reset_head_and_tail
-    @head = nil
-    @tail = nil
-  end
-
   # returns true if the passed in value is in the list, else returns false.
   def contains?(value)
-    current = Node.new(current, @head)
-    until current.next_node.nil?
-      current = current.next_node
+    return nil if @head.nil?
+
+    current = @head
+    until current.nil?
       return true if current.value == value
+
+      current = current.next_node
     end
     false
   end
 
   # returns the index of the node containing value, or nil if not found
-  def find(value); end
+  def find(value)
+    return nil if @head.nil?
+
+    current = @head
+    counter = 0
+    until current.next_node.nil?
+      current = current.next_node
+      return counter if current.value == value
+
+      counter += 1
+    end
+    nil
+  end
+
+  # def insert_at(value, index)
+
+  # end
 
   # represent LinkedList objects as strings, in order to print them to console
-  def to_s(result = '')
-    return result if @head.nil?
+  def to_s
+    return nil if @head.nil?
 
-    current = Node.new(@head.value, @head)
+    result = ''
+    current = @head
     until current.nil?
-      unless current.next_node.nil?
-        result += " ( #{current.next_node.value} ) -> "
-      end
-      result += 'nil ' if current.next_node.nil?
+      result += "( #{current.value} ) -> "
+      result += 'nil' if current.next_node.nil?
       current = current.next_node
     end
     result
