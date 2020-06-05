@@ -2,26 +2,12 @@
 
 # linked-list containing Node objects
 class LinkedList
-  attr_reader :head, :tail
+  attr_accessor :head, :tail
 
   def initialize(head = nil, tail = nil)
     @head = head
     @tail = tail
   end
-
-  # adds a new node containing value to the end of the list
-  # def append(value)
-  #   if @head.nil?
-  #     prepend(value)
-  #     @tail = @head
-  #   else
-  #     current = @head
-  #     current = current.next_node until current.next_node.nil?
-  #     current.next_node = Node.new(value)
-  #     @tail = current.next_node
-  #   end
-  #   @tail.value
-  # end
 
   def append(value)
     if @head.nil?
@@ -42,10 +28,9 @@ class LinkedList
   end
 
   # returns the total number of nodes in the list
-  def size
+  def size(size = 0)
     return 0 if @head.nil?
 
-    size = 0
     current = @head
     until current.nil?
       current = current.next_node
@@ -55,16 +40,15 @@ class LinkedList
   end
 
   # returns the node at the given index
-  def at(index)
-    return 'index must be an integer' if index.is_a?(String)
+  def at(index, i = 0)
+    return nil if index < 0
 
-    i = 1
     current = @head
-    until i > index
+    until i == index
       current = current.next_node unless current.nil?
       i += 1
     end
-    current.nil? ? nil : current.value
+    current
   end
 
   # removes the last element from the list
@@ -97,36 +81,46 @@ class LinkedList
   end
 
   # returns the index of the node containing value, or nil if not found
-  def find(value)
+  def find(value, index = 0)
     return nil if @head.nil?
 
     current = @head
-    counter = 0
-    until current.next_node.nil?
+    until current.nil?
+      return index if current.value == value
       current = current.next_node
-      return counter if current.value == value
-
-      counter += 1
+      index += 1
     end
-    nil
   end
 
-  # def insert_at(value, index)
 
-  # end
+  # inserts the node the with provided value at the given index
+  def insert_at(value, index)
+    i = 0
+    current = @head
+    until i == index
+      current = current.next_node
+      i += 1
+    end
+    
+    if current.next_node.nil? 
+      current = Node.new(value, nil)
+    else
+      current = Node.new(value, current)
+    end
+  end
 
   # represent LinkedList objects as strings, in order to print them to console
   def to_s
     return nil if @head.nil?
 
-    result = ''
+    string = ''
     current = @head
     until current.nil?
-      result += "( #{current.value} ) -> "
-      result += 'nil' if current.next_node.nil?
+      string += "( #{current.value} ) -> "
+      string += 'nil' if current.next_node.nil?
       current = current.next_node
     end
-    result
+    string
   end
 end
 
