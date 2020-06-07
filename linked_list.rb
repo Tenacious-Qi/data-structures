@@ -40,28 +40,30 @@ class LinkedList
   end
 
   # returns the node at the given index
-  def at(index, i = 0)
-    return nil if index < 0
+  def at(index, curr_idx = 0)
+    return nil if index > size - 1 || index.negative?
 
     current = @head
-    until i == index
+    until curr_idx == index
       current = current.next_node unless current.nil?
-      i += 1
+      curr_idx += 1
     end
     current
   end
 
   # removes the last element from the list
   def pop
+    return nil if @head.nil?
+
     current = @head
     if @head.next_node.nil?
       @head = nil
       @tail = nil
-      result = current.value
+      result = current
     else
       current = current.next_node until current.next_node.next_node.nil?
       @tail = current
-      result = current.next_node.value
+      result = current.next_node
       current.next_node = nil
     end
     result
@@ -87,25 +89,60 @@ class LinkedList
     current = @head
     until current.nil?
       return index if current.value == value
+
       current = current.next_node
       index += 1
     end
   end
 
-
   # inserts the node the with provided value at the given index
   def insert_at(value, index)
-    i = 0
+    return nil if index > size || index.negative?
+    return prepend(value) if index.zero?
+
+    previous = nil
     current = @head
-    until i == index
+    until current.nil?
+      previous = current
       current = current.next_node
-      i += 1
+      if current == at(index)
+        return previous.next_node = Node.new(value, current)
+      end
     end
-    
-    if current.next_node.nil? 
-      current = Node.new(value, nil)
+  end
+
+  # similar to #insert_at but inserts after given index
+  def insert_after(value, index)
+    return nil if index > size - 1 || index.negative?
+    return append(value) if index == size - 1
+
+    current = @head
+    until current.nil?
+      current = current.next_node
+      if current == at(index)
+        return current.next_node = Node.new(value, current.next_node)
+      end
+    end
+  end
+
+  def remove_at(index)
+    return nil if index > size - 1 || index.negative?
+
+    if index.zero?
+      @head = @head.next_node
+    elsif index == size - 1
+      pop
     else
-      current = Node.new(value, current)
+      previous = nil
+      current = @head
+      until current.nil?
+        previous = current
+        current = current.next_node
+        if current == at(index)
+          previous.next_node = current.next_node
+          return current
+        end
+      end
     end
   end
 
