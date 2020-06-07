@@ -165,6 +165,7 @@ class LinkedList
     end
     string
   end
+end
   
 # fruits = LinkedList.new
 # fruits.append('bananas')
