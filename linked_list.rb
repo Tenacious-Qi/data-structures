@@ -165,4 +165,41 @@ class LinkedList
     end
     string
   end
-end
+  
+# fruits = LinkedList.new
+# fruits.append('bananas')
+# fruits.append('apples')
+# fruits.append('oranges')
+# fruits.append('berries')
+# p fruits.to_s
+# puts
+
+# fruits.prepend('pears')
+# p fruits.to_s
+# puts
+
+# p fruits.size
+# puts
+
+# p fruits.at(2)
+# fruits.pop
+# puts
+# p fruits.to_s
+# puts
+
+# p fruits.contains?('berries')
+# p fruits.contains?('apples')
+# puts
+
+# p "index of oranges: #{fruits.find('oranges')}"
+
+# fruits.insert_at('kiwi', 1)
+# p fruits.to_s
+# puts
+
+# fruits.insert_after('jackfruit', 1)
+# p fruits.to_s
+# puts
+
+# fruits.remove_at(1)
+# p fruits.to_s
