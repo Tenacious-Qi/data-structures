@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'node.rb'
+
 # linked-list containing Node objects
 class LinkedList
   attr_accessor :head, :tail
@@ -117,10 +119,14 @@ class LinkedList
     return append(value) if index == size - 1
 
     current = @head
-    until current.nil?
-      current = current.next_node
-      if current == at(index)
-        return current.next_node = Node.new(value, current.next_node)
+    if index.zero?
+      current.next_node = Node.new(value, current.next_node)
+    else
+      until current.nil?
+        current = current.next_node
+        if current == at(index)
+          current.next_node = Node.new(value, current.next_node)
+        end
       end
     end
   end
@@ -158,15 +164,5 @@ class LinkedList
       current = current.next_node
     end
     string
-  end
-end
-
-# creates Node objects
-class Node
-  attr_accessor :value, :next_node
-
-  def initialize(value = nil, next_node = nil)
-    @value = value
-    @next_node = next_node
   end
 end
