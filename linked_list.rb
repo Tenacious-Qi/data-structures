@@ -125,7 +125,7 @@ class LinkedList
       until current.nil?
         current = current.next_node
         if current == at(index)
-          current.next_node = Node.new(value, current.next_node)
+          return current.next_node = Node.new(value, current.next_node)
         end
       end
     end
